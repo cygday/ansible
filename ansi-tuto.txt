@@ -1,0 +1,15 @@
+web1 ansible_host=192.168.56.10 ansible_user=vagrant ansible_password=12345
+
+sudo apt install sshpass -> for ssh connection
+
+ansible -i inventory -m ping web1 -> to connect to vm
+
+ansible -i inventory -m "copy" -a "src=index.html dest=/var/www/html" web1
+--become
+
+to install the apache2 on the client 
+ansible -i inventory -m apt -a "name=apache2 state=present" web1 --become
+
+where become -> use sudo command
+
+

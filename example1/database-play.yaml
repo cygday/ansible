@@ -1,0 +1,50 @@
+---
+- name: setting up msyql-server
+  hosts: dbservergrp
+  become: yes
+
+  vars:
+   ansible_python_interpreter: /usr/bin/python3.11
+   mysql_root_password: "mysql_root"
+   db_name: mysql-server
+   db_user: sqluser
+   db_user_password: "userpassword"
+
+  tasks:
+    - name: update apt cache
+      apt:
+       update_cache: yes
+       
+    - name: install mysql server
+      apt:
+         name: default-mysql-server
+         state: present
+        
+
+
+
+
+
+  
+
+
+
+
+
+    - name: create database
+      community.mysql.mysql_db:
+         name: "{{ db_name }}"
+         state: present
+         login_user: root
+         login_password: "{{ mysql_root_password }}"
+
+    - name: create user with privileges
+      community.mysql.mysql_user:
+         name: "{{ db_user }}"
+         password: "{{ db_user_password }}"
+         priv: "{{ db_name }}.*:ALL"
+         host: "%"
+         state: present
+         login_user: root
+         login_password: "{{ mysql_root_password }}"
+
